@@ -3,8 +3,8 @@
 Internal tooling for Adaptyv Bio's protein-engineering workflows — a monorepo of
 small, **finished** tools built on one shared foundation.
 
-> 🎥 **Loom walkthrough:** https://www.loom.com/share/laurent-rosa-arsene-adaptyv
-> &nbsp;·&nbsp; 🌐 **Mini-site (novice & expert):** [`docs/site/index.html`](docs/site/index.html)
+> 🌐 **Live site (novice & expert):** https://baloozeone972.github.io/adaptyv-suite/
+> &nbsp;·&nbsp; 🎥 **Loom walkthrough:** https://www.loom.com/share/laurent-rosa-arsene-adaptyv
 
 Adaptyv ships every binding customer a data package of raw sensorgrams, fitted
 curves and QC metrics — and no tool to read it. It publishes a protein-expression

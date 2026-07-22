@@ -6,8 +6,8 @@ This folder is your fast path in.
 
 - **[pitch.md](pitch.md)** — why this, in one page.
 - **[speech.md](speech.md)** — the spoken presentation (≈ 4 min, and a 60-second version).
-- **Mini-site** — [`../site/index.html`](../site/index.html): a guided tour you can read at
-  **novice** or **expert** depth (open it in a browser).
+- **Live mini-site** — https://baloozeone972.github.io/adaptyv-suite/ : a guided tour you can
+  read at **novice** or **expert** depth (also at [`../site/index.html`](../site/index.html)).
 - **Whole-suite docs** — [technical](../TECHNICAL.md) · [plain-language](../VULGARISATION.md).
 
 ## Evaluate it in 3 minutes
