@@ -3,7 +3,8 @@
 Internal tooling for Adaptyv Bio's protein-engineering workflows — a monorepo of
 small, **finished** tools built on one shared foundation.
 
-> 🎥 **Loom walkthrough:** _<add your Loom link here>_
+> 🎥 **Loom walkthrough:** https://www.loom.com/share/laurent-rosa-arsene-adaptyv
+> &nbsp;·&nbsp; 🌐 **Mini-site (novice & expert):** [`docs/site/index.html`](docs/site/index.html)
 
 Adaptyv ships every binding customer a data package of raw sensorgrams, fitted
 curves and QC metrics — and no tool to read it. It publishes a protein-expression
@@ -149,3 +150,16 @@ the four newest specs (L, M, N, O) in
 - Any reported number carries its data source and, where it's a performance
   metric, a confidence interval and sample size.
 - English throughout the code; functions under 50 lines; no magic constants.
+
+## For the Adaptyv hiring team
+
+Start here: **[docs/submission/README.md](docs/submission/README.md)** — the pitch,
+a 3-minute evaluation path, and the presentation speech. Or open the mini-site
+([docs/site/index.html](docs/site/index.html)) for a guided tour at novice or
+expert depth.
+
+## Licence
+
+[MIT](LICENSE) © 2026 Laurent Rosa Arsène. The author retains copyright, so the
+work can be **assigned to Adaptyv Bio in full at any time** should we agree to it;
+until then MIT lets Adaptyv use, run and build on it without restriction.

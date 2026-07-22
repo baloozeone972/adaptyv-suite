@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>adaptyv-suite — protein-engineering tooling</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #14181f; --muted: #5a6472; --card: #f6f8fa;
+    --line: #e3e8ee; --accent: #0072B2; --accent2: #009E73; --warn: #b26a00;
+    --radius: 14px; --max: 68rem;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0e1116; --fg:#e6edf3; --muted:#9aa7b4; --card:#161b22; --line:#242c36; --accent:#58a6ff; --accent2:#3fb950; }
+  }
+  :root[data-theme="dark"] { --bg:#0e1116; --fg:#e6edf3; --muted:#9aa7b4; --card:#161b22; --line:#242c36; --accent:#58a6ff; --accent2:#3fb950; }
+  :root[data-theme="light"] { --bg:#ffffff; --fg:#14181f; --muted:#5a6472; --card:#f6f8fa; --line:#e3e8ee; --accent:#0072B2; --accent2:#009E73; }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font);
+         line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 1.25rem; }
+  code, .mono { font-family: var(--mono); font-size: .92em; }
+
+  header.hero { border-bottom: 1px solid var(--line); padding: 2.6rem 0 2rem;
+                background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 7%, var(--bg)), var(--bg)); }
+  .eyebrow { color: var(--accent2); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: .72rem; }
+  h1 { font-size: clamp(2rem, 5vw, 3rem); margin: .3rem 0 .4rem; line-height: 1.1; }
+  .tagline { font-size: 1.15rem; color: var(--muted); max-width: 44rem; margin: 0 0 1.3rem; }
+  .stats { display: flex; flex-wrap: wrap; gap: 1.4rem; margin: 1.2rem 0 0; }
+  .stat b { font-size: 1.5rem; display: block; }
+  .stat span { color: var(--muted); font-size: .82rem; }
+
+  .controls { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin: 1.5rem 0 .2rem; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--card); }
+  .seg button { border: 0; background: transparent; color: var(--muted); padding: .45rem 1rem; font: inherit; font-size: .9rem; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+  .ghost { border: 1px solid var(--line); background: var(--card); color: var(--fg); border-radius: 999px;
+           padding: .45rem 1rem; font: inherit; font-size: .9rem; cursor: pointer; }
+  .links { margin-left: auto; display: flex; gap: 1rem; font-size: .92rem; }
+
+  section { padding: 2.4rem 0; border-bottom: 1px solid var(--line); }
+  h2 { font-size: 1.5rem; margin: 0 0 .3rem; }
+  .lead { color: var(--muted); max-width: 46rem; margin: 0 0 1.2rem; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr)); gap: 1rem; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem 1.15rem; }
+  .card .spec { font-family: var(--mono); font-size: .72rem; color: #fff; background: var(--accent);
+                border-radius: 6px; padding: .1rem .4rem; }
+  .card h3 { margin: .55rem 0 .15rem; font-size: 1.06rem; }
+  .card .one { color: var(--muted); font-size: .9rem; margin: 0 0 .6rem; }
+  .card p.body { margin: 0; font-size: .92rem; }
+  .pill { display:inline-block; font-size:.7rem; color:var(--accent2); border:1px solid var(--line); border-radius:999px; padding:0 .5rem; margin-top:.6rem;}
+
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+  @media (max-width: 640px) { .cols { grid-template-columns: 1fr; } .links{margin-left:0; width:100%} }
+  pre { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: .9rem 1rem; overflow-x: auto; font-size: .86rem; }
+  .note { border-left: 3px solid var(--warn); padding: .3rem 0 .3rem .9rem; color: var(--muted); }
+
+  /* audience toggle */
+  body[data-mode="novice"] .expert-only { display: none; }
+  body[data-mode="expert"] .novice-only { display: none; }
+
+  footer { padding: 2rem 0 3rem; color: var(--muted); font-size: .9rem; }
+</style>
+</head>
+<body data-mode="novice">
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Take-home submission · AI Engineer</div>
+    <h1>adaptyv-suite</h1>
+    <p class="tagline">Thirteen small, finished tools for Adaptyv Bio's protein-engineering
+      workflow — built on one shared foundation, for the frictions Adaptyv documents itself.</p>
+
+    <div class="stats">
+      <div class="stat"><b>13</b><span>finished tools</span></div>
+      <div class="stat"><b>285</b><span>tests · 100% coverage</span></div>
+      <div class="stat"><b>0</b><span>secrets · mypy&nbsp;strict clean</span></div>
+      <div class="stat"><b>1</b><span>command: <code>make&nbsp;demo</code></span></div>
+    </div>
+
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Explanation depth">
+        <button id="m-novice" aria-pressed="true">🌱 Novice</button>
+        <button id="m-expert" aria-pressed="false">🔬 Expert</button>
+      </div>
+      <button class="ghost" id="theme">◐ Theme</button>
+      <div class="links">
+        <a href="https://github.com/baloozeone972/adaptyv-suite">Repository</a>
+        <a href="https://www.loom.com/share/laurent-rosa-arsene-adaptyv">Loom</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>The problem</h2>
+    <p class="novice-only body">Adaptyv is a lab that tests proteins for its customers: you
+      send "recipes", it makes them, measures whether they work (how strongly they stick,
+      whether they dissolve, whether they're stable), and sends the results back. Around that
+      lab there are the same recurring headaches — a results file nobody can read, good money
+      spent on designs that were never going to work, days lost to reviewing charts by hand.
+      This suite is a toolbox that tackles them, one at a time.</p>
+    <p class="expert-only body">The brief was open, so the material set the scope. Adaptyv's own
+      docs and posts name the frictions: a binding data package shipped with no reader; a
+      published expression workflow nobody implemented; a 21-day turnaround spending days 16–21
+      on manual QC; being the only CRO with an API yet still breaking reproducible pipelines at
+      the lab door. Each tool targets a <em>documented</em> friction — not a guessed one — and
+      they share primitives (contracts, kinetics, pricing, guardrails, reporting), so they live
+      in one <code>uv</code> workspace on a single foundation package, <code>adaptyv-core</code>.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>The principle: honesty by construction</h2>
+    <p class="lead">Adaptyv publishes confidence intervals and negative results. The suite holds
+      itself to the same bar.</p>
+    <div class="cols">
+      <div>
+        <p class="novice-only body"><b>Never a lonely number.</b> Every result comes with its
+          margin of error, like a poll given "±2%". <b>We say what we don't know.</b> Each tool
+          lists, in plain text, what it does <em>not</em> claim. <b>Fake data is labelled fake.</b>
+          Since a candidate has no access to the real data, every demo runs on made-up data — and
+          it says so, in big letters, on every report.</p>
+        <p class="expert-only body"><b>CIs everywhere.</b> Performance metrics ship a bootstrap
+          interval and <code>n</code>. <b>Declared limitations.</b> Each package has a
+          <code>docs/limitations.md</code>. <b>DataSource stamped.</b> Every report carries a
+          synthetic / real / foundry banner. <b>Refusal to fabricate.</b> When the kinetics fit
+          can't identify an off-rate (too little dissociation), the tool flags it rather than
+          printing a confident K<sub>D</sub>.</p>
+      </div>
+      <div>
+        <pre>$ make all
+ruff .................. clean
+mypy --strict ......... clean
+pytest ................ 285 passed
+coverage .............. 100.00%  (gate 98%)</pre>
+        <p class="note">Two real defects were found <em>by the tests</em> and fixed before they
+          could matter: a zip path-traversal in the package loader, and the Foundry token leaking
+          into a dataclass <code>repr</code>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>The thirteen tools</h2>
+    <p class="lead">Toggle <b>Novice</b> / <b>Expert</b> above to change the depth of each card.</p>
+    <div class="grid" id="tools"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>How it fits together</h2>
+    <p class="novice-only body">All the tools share one "toolbox" of basic parts (a common
+      vocabulary, the maths, the report style, the safety rails). So they understand each other
+      and never contradict — "a protein too greasy to dissolve" means the same thing everywhere.</p>
+    <p class="expert-only body">A <code>uv</code> workspace. Dependencies point strictly downward:
+      every tool depends on <code>adaptyv-core</code>; a few tool→tool edges never cycle
+      (<code>adaptyv-kinetics → protviz</code>, <code>sensorgram-triage → adaptyv-kinetics</code>,
+      <code>dbtl-agent → binder-triage</code>). Contracts (Pydantic v2) are frozen first, so each
+      package is built and tested in isolation against synthetic fixtures.</p>
+    <pre>adaptyv-core  ── schemas · seq · biophysics · stats · report ·
+                 foundry · pricing · guard · config · logging
+     ▲
+ preflight · adaptyv-kinetics · expression-rescue · sensorgram-triage ·
+ insilico-bench · campaign-planner · foundry-guard · binder-triage ·
+ dbtl-agent · adaptyv-pipeline · protviz · mosaic-loop · boltz-tune</pre>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>See it run</h2>
+    <pre>make install     # uv sync --all-packages
+make demo        # synth a binding package, QC it, render report.html
+make all         # the quality gate CI runs</pre>
+    <p class="lead" style="margin-top:1rem">Full details:
+      <a href="../TECHNICAL.md">technical overview</a> ·
+      <a href="../VULGARISATION.md">plain-language overview</a> ·
+      <a href="../submission/pitch.md">the pitch</a>.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    adaptyv-suite · MIT © 2026 Laurent Rosa Arsène · built for the Adaptyv Bio take-home.
+    All demonstration data is synthetic and declared.
+  </div>
+</footer>
+
+<script>
+  const TOOLS = [
+    ["C","preflight","Catch bad submissions before they cost a well.",
+      "The spell-checker for lab orders: it flags format and platform mistakes before you pay for them.",
+      "Validation rules from the public docs (alphabet, length, multichain, aromatics, target, duplicates, plate tiers); a pass/review/reject verdict with a non-zero exit code to gate a pipeline."],
+    ["G","adaptyv-kinetics","Read the binding data package — and verify it.","★ flagship",
+      "Turns the illegible results archive into a clear report, and re-does the calculations to double-check them.",
+      "Parses the package, re-fits a global Langmuir model independently (bootstrap CI on K<sub>D</sub>), flags artifacts, and renders a self-contained HTML report. Refuses to report an unidentifiable off-rate."],
+    ["I","expression-rescue","Diagnose designs that won't express; suggest fixes.",
+      "Predicts which proteins won't be made, explains why (pinpointing where), and proposes cautious corrections.",
+      "Reuses preflight's validation; ten positioned developability liabilities from biophysics; a heuristic risk tier; ≤3-mutation rescue that re-diagnoses to report the risk drop honestly."],
+    ["H","sensorgram-triage","Auto-sort curves; quantify review saved.",
+      "Sorts result curves into green / orange / red and says how much manual review you can safely drop.",
+      "Features from kinetics + cross-replicate K<sub>D</sub> disagreement; a deterministic logistic model; the central figure is the delegation curve — auto-approved fraction vs false-negative rate."],
+    ["D","insilico-bench","Which in-silico score predicts wet-lab outcome?",
+      "Checks which computer-predicted scores actually match what the lab measures — and which are no better than chance.",
+      "AUC-ROC / average precision / Spearman / hit-rate@k with paired bootstrap CIs, per score and per campaign; a reproducible report over a CSV export."],
+    ["J","campaign-planner","Plan experiments under a budget.",
+      "Finds the best way to spend an experiment budget — including a clever two-step strategy the web form can't express.",
+      "Plate-tier pricing; Monte-Carlo yield & cost; ranks direct vs two-step (cheap filter → affinity on survivors); reports the P(express) crossover where filtering first pays off."],
+    ["K","foundry-guard","A spend guardrail an agent can't bypass.",
+      "The bodyguard for an AI that spends money: a hard budget cap, an allowed-list, human sign-off, and an un-forgeable log.",
+      "Reservation-based budget (property-tested: no call sequence can exceed the cap), scope allow-list, escalation gate, and a hash-chained audit journal. Default-deny."],
+    ["A","binder-triage","Pick diverse designs, not a monoculture.",
+      "Chooses which proteins to test so the plate is varied, instead of 24 near-copies of one design.",
+      "Submodular diverse-greedy selection vs naive top-N; cuts pairwise identity and spreads families, trading a little predicted yield for a better worst case (the TREM2 monoculture lesson)."],
+    ["B","dbtl-agent","An autonomous loop — governed.",
+      "An AI that runs experiment rounds by itself, but under strict watch: budget it can't blow, log it can't fake.",
+      "Governance-first: every round guarded (budget + audit), anti-monoculture selection, Thompson-sampling learner over per-family beliefs. Beats a random baseline ~+20–30% at equal budget."],
+    ["L","adaptyv-pipeline","The wet lab as a reproducible pipeline step.","★ Adaptyv-only",
+      "Turns 'send to the lab' into an automatic step in a research pipeline — no more copy-pasting into a website.",
+      "A Nextflow/Snakemake step over the Foundry API: dry-run cost estimate, resume across the ~3-week turnaround, and model-version↔result logging. No other CRO can offer this — none has an API."],
+    ["O","protviz","One shared set of correct figures.",
+      "The common house style: the domain's six charts, drawn correctly once, instead of re-invented in every notebook.",
+      "Array-in / PNG-out figure primitives (sensorgram, kinetic map, censored K<sub>D</sub>, calibration, hit-rate@budget) on a colour-blind-safe theme. adaptyv-kinetics already draws through it."],
+    ["N","mosaic-loop","Feed measurements back to Mosaic.",
+      "Sends real measurements back to a design tool (Mosaic) to correct its estimates — and shows which of its scores are actually reliable.",
+      "Mosaic's three predicted terms map one-to-one to Adaptyv's three assays. Per-term drift = 1−Spearman flags poor proxies; recalibration realigns the composite objective with reality."],
+    ["M","boltz-tune","Would fine-tuning help — and at what data cost?",
+      "Measures honestly whether specialising an AI model is worth it, and how much more data a real gain would need.",
+      "A reproducible learning-curve harness (framed as research): fits score(n)=plateau−coef·n^−α and extrapolates the data needed for a target lift — including 'not enough yet, here's the factor'."]
+  ];
+  const grid = document.getElementById("tools");
+  grid.innerHTML = TOOLS.map(t => {
+    const pill = t.length > 5 ? `<span class="pill">${t[3]}</span>` : "";
+    const novice = t.length > 5 ? t[4] : t[3];
+    const expert = t.length > 5 ? t[5] : t[4];
+    return `<article class="card">
+      <span class="spec">${t[0]}</span> <span class="mono">${t[1]}</span>
+      <h3>${t[1]}</h3>
+      <p class="one">${t[2]}</p>
+      <p class="body novice-only">${novice}</p>
+      <p class="body expert-only">${expert}</p>
+      ${pill}
+    </article>`;
+  }).join("");
+
+  const body = document.body;
+  const bn = document.getElementById("m-novice"), be = document.getElementById("m-expert");
+  function setMode(m){ body.dataset.mode=m; bn.setAttribute("aria-pressed", m==="novice"); be.setAttribute("aria-pressed", m==="expert"); }
+  bn.onclick = () => setMode("novice"); be.onclick = () => setMode("expert");
+
+  const root = document.documentElement;
+  document.getElementById("theme").onclick = () => {
+    const cur = root.getAttribute("data-theme");
+    const next = cur === "dark" ? "light" : cur === "light" ? "dark"
+      : (matchMedia("(prefers-color-scheme: dark)").matches ? "light" : "dark");
+    root.setAttribute("data-theme", next);
+  };
+</script>
+</body>
+</html>
