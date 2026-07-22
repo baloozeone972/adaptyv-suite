@@ -2,6 +2,10 @@
 
 No secret ever lives in code or on disk. The Foundry token is read on demand
 and never logged. BYOK ("bring your own key") is the mandated posture.
+
+Env var names and the default API base match Adaptyv's own `adaptyv-sdk`
+(https://github.com/adaptyvbio/adaptyv-sdk), so a token exported for the
+official SDK works here unchanged.
 """
 
 from __future__ import annotations
@@ -9,9 +13,9 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass, field
 
-_TOKEN_ENV = "ADAPTYVBIO_API_TOKEN"
-_API_BASE_ENV = "ADAPTYVBIO_API_BASE"
-_DEFAULT_API_BASE = "https://api.adaptyvbio.com"
+_TOKEN_ENV = "ADAPTYV_API_KEY"
+_API_BASE_ENV = "ADAPTYV_API_URL"
+_DEFAULT_API_BASE = "https://foundry-api-public.adaptyvbio.com/api/v1"
 
 
 @dataclass(frozen=True, slots=True)

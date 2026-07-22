@@ -160,6 +160,6 @@ expert depth.
 
 ## Licence
 
-[MIT](LICENSE) © 2026 Laurent Rosa Arsène. The author retains copyright, so the
+[MIT](LICENSE) © 2026 Laurent ROSA-ARSENE. The author retains copyright, so the
 work can be **assigned to Adaptyv Bio in full at any time** should we agree to it;
 until then MIT lets Adaptyv use, run and build on it without restriction.

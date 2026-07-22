@@ -56,7 +56,28 @@ that never cycle: kinetics→protviz, H→kinetics, B→binder-triage). See
 | `guard` | reservation-based `Budget`, default-deny `Guard`, hash-chained audit |
 | `config` / `logging` | env-only settings (token never logged), structlog JSON |
 
-## 4. How data flows through the tools
+## 4. Aligned with Adaptyv's own conventions
+
+To make a future integration a documented swap rather than a rewrite, this repo
+follows the same conventions as Adaptyv's public Python repos (checked against
+[`adaptyvbio/adaptyv-sdk`](https://github.com/adaptyvbio/adaptyv-sdk), the
+official Foundry SDK):
+
+| Convention | Adaptyv's repos | This repo |
+|---|---|---|
+| Package manager / build | `uv` + `hatchling` | same |
+| Lint / format | `ruff` (line-length 100) | same |
+| Types | `mypy --strict` | same |
+| Tests | `pytest` | same |
+| Licence | MIT (their dominant choice) | MIT |
+| Pre-commit | hygiene hooks + ruff | same, see `.pre-commit-config.yaml` |
+| Env vars | `ADAPTYV_API_KEY`, `ADAPTYV_API_URL` | same names (`adaptyv_core.config`) |
+| API base | `https://foundry-api-public.adaptyvbio.com/api/v1` | same default |
+
+Concretely: a token exported as `ADAPTYV_API_KEY` for the official SDK works here
+unchanged — `adaptyv_core.config.Settings.from_env()` reads the identical variable.
+
+## 5. How data flows through the tools
 
 - **Before the lab:** `preflight` and `expression-rescue` validate and diagnose designs;
   `binder-triage` and `campaign-planner` decide *what* and *how* to run under a budget;
@@ -68,7 +89,7 @@ that never cycle: kinetics→protviz, H→kinetics, B→binder-triage). See
   `boltz-tune` measure what predicts outcome; `mosaic-loop` feeds measurements back into
   the design objective. `protviz` draws them all.
 
-## 5. Quality & security
+## 6. Quality & security
 
 `make all` = `ruff` (lint+format) + `mypy --strict` + `pytest`. In CI (GitHub Actions):
 **285 tests, 100% line coverage, gated at 98%.** Property-based tests (`hypothesis`) on
@@ -77,7 +98,7 @@ found *by the tests* and fixed: a zip path-traversal in the package loader, and 
 Foundry token leaking into a dataclass `repr`. No secret in code; the token is read from
 the environment and never logged.
 
-## 6. Running it
+## 7. Running it
 
 ```bash
 make install    # uv sync --all-packages
