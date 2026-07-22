@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install workspace
+        run: uv sync --all-packages
+
+      - name: Lint
+        run: |
+          uv run ruff check packages
+          uv run ruff format --check packages
+
+      - name: Type check
+        run: uv run mypy packages/adaptyv-core/src/adaptyv_core packages/preflight/src/preflight packages/adaptyv-kinetics/src/adaptyv_kinetics packages/expression-rescue/src/expression_rescue packages/adaptyv-pipeline/src/adaptyv_pipeline packages/sensorgram-triage/src/sensorgram_triage packages/insilico-bench/src/insilico_bench packages/campaign-planner/src/campaign_planner packages/foundry-guard/src/foundry_guard packages/binder-triage/src/binder_triage packages/dbtl-agent/src/dbtl_agent packages/protviz/src/protviz packages/mosaic-loop/src/mosaic_loop packages/boltz-tune/src/boltz_tune
+
+      - name: Tests
+        run: uv run pytest --cov=adaptyv_core --cov=preflight --cov=adaptyv_kinetics --cov=expression_rescue --cov=adaptyv_pipeline --cov=sensorgram_triage --cov=insilico_bench --cov=campaign_planner --cov=foundry_guard --cov=binder_triage --cov=dbtl_agent --cov=protviz --cov=mosaic_loop --cov=boltz_tune --cov-report=term-missing --cov-fail-under=98

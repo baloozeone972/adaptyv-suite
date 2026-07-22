@@ -1,0 +1,20 @@
+[project]
+name = "binder-triage"
+version = "0.0.1"
+description = "Constrained, diversity-aware selection of designs under a plate budget — more expected binders than naive top-N, without monoculture."
+requires-python = ">=3.12"
+dependencies = [
+    "adaptyv-core",
+    "numpy>=1.26",
+    "typer>=0.12",
+]
+
+[project.scripts]
+binder-triage = "binder_triage.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/binder_triage"]

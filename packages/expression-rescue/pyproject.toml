@@ -1,0 +1,19 @@
+[project]
+name = "expression-rescue"
+version = "0.0.1"
+description = "Diagnose designs that won't express and suggest corrected variants — the workflow Adaptyv published, implemented."
+requires-python = ">=3.12"
+dependencies = [
+    "adaptyv-core",
+    "typer>=0.12",
+]
+
+[project.scripts]
+expression-rescue = "expression_rescue.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/expression_rescue"]

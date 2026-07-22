@@ -1,0 +1,17 @@
+[project]
+name = "adaptyv-core"
+version = "0.0.1"
+description = "Shared foundation for the Adaptyv tooling suite: contracts, sequence I/O, biophysics, statistics, reporting, Foundry client."
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic>=2.7",
+    "structlog>=24",
+    "numpy>=1.26",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/adaptyv_core"]

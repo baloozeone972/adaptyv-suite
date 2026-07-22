@@ -1,0 +1,19 @@
+[project]
+name = "foundry-guard"
+version = "0.0.1"
+description = "A guardrail proxy between an agent and Adaptyv's Foundry: spend caps, scope allow-lists, human escalation, hash-chained audit."
+requires-python = ">=3.12"
+dependencies = [
+    "adaptyv-core",
+    "typer>=0.12",
+]
+
+[project.scripts]
+foundry-guard = "foundry_guard.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/foundry_guard"]

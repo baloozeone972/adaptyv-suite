@@ -1,0 +1,20 @@
+# Snakemake rule: the Adaptyv wet lab as a pipeline step.
+# Dry-run by default; set execute=True in config to actually submit.
+
+rule adaptyv_assay:
+    input:
+        fasta="designs.fasta",
+    output:
+        state="results/adaptyv/run.state.json",
+    params:
+        assay=config.get("adaptyv_assay", "affinity"),
+        budget=config.get("adaptyv_budget", 0),
+        execute="--execute" if config.get("adaptyv_execute", False) else "",
+        model_version=config.get("model_version", "unknown"),
+    shell:
+        # No submission, no spend, unless execute is enabled.
+        "adaptyv-pipeline run {input.fasta} "
+        "--assay {params.assay} --budget {params.budget} {params.execute} "
+        "--model-version '{params.model_version}' --tracker results/adaptyv/tracker.jsonl "
+        "--state-dir results/adaptyv && "
+        "cp results/adaptyv/*.state.json {output.state}"

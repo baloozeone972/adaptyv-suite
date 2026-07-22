@@ -1,0 +1,82 @@
+[project]
+name = "adaptyv-suite"
+version = "0"
+description = "Internal tooling suite for Adaptyv Bio protein engineering workflows"
+requires-python = ">=3.12"
+
+[tool.uv]
+package = false
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[tool.uv.sources]
+adaptyv-core = { workspace = true }
+adaptyv-kinetics = { workspace = true }
+binder-triage = { workspace = true }
+protviz = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "pytest>=8",
+    "pytest-cov>=5",
+    "hypothesis>=6",
+]
+
+# ---------------------------------------------------------------------------
+# Quality tooling — shared by every package. Non-negotiable per the common
+# ground rules (see docs/decisions/0001).
+# ---------------------------------------------------------------------------
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["packages"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM", "C4", "PLC", "PLE", "PLW", "RUF"]
+# Scientific unit-suffixed names (kd_nM, concentration_nM, conc_M) are domain
+# convention and match Adaptyv's own column headers; do not force lowercase.
+ignore = ["N803", "N815"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_unreachable = true
+warn_redundant_casts = true
+namespace_packages = true
+explicit_package_bases = true
+mypy_path = [
+    "packages/adaptyv-core/src",
+    "packages/preflight/src",
+    "packages/adaptyv-kinetics/src",
+    "packages/expression-rescue/src",
+    "packages/adaptyv-pipeline/src",
+    "packages/sensorgram-triage/src",
+    "packages/insilico-bench/src",
+    "packages/campaign-planner/src",
+    "packages/foundry-guard/src",
+    "packages/binder-triage/src",
+    "packages/dbtl-agent/src",
+    "packages/protviz/src",
+    "packages/mosaic-loop/src",
+    "packages/boltz-tune/src",
+]
+
+[[tool.mypy.overrides]]
+module = ["scipy.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers --import-mode=importlib"
+testpaths = ["packages"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]
