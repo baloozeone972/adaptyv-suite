@@ -30,7 +30,7 @@ suppressing it.
 - Every report is stamped with its `DataSource` (synthetic / real / foundry) —
   never let a synthetic result look real.
 - New packages follow the existing doc set: `README.md`, `docs/technical.md`,
-  `docs/vulgarisation.md`, `docs/limitations.md`, `JOURNAL.md`.
+  `docs/vulgarisation.md`, `docs/limitations.md`.
 
 ## Env vars
 

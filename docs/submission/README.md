@@ -42,11 +42,9 @@ Then skim **one** flagship file to judge the code: the independent re-fit,
   Mosaic, Proteinbase, GPU) sit behind protocols with fakes — a documented swap, not a
   rewrite. Each tool's `docs/limitations.md` says exactly where that line is.
 
-## Build order and reasoning
+## User guides
 
-The full prioritised plan, and why each tool was built when it was, is in
-[../action-plans/00-roadmap.md](../action-plans/00-roadmap.md). Every package also keeps a
-`JOURNAL.md` — a build logbook with the exact commands run, including the dead-ends and the
-fixes, so the work can be followed and reproduced.
+Task-oriented, per-tool guides (install once, then how to actually run each CLI with
+real examples and expected output) are in [`../guides/`](../guides/).
 
 I'd genuinely enjoy talking through which of these would move the needle most for you.

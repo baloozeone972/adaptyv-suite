@@ -35,7 +35,7 @@ prioritised plan for the rest.
 | [`expression-rescue`](packages/expression-rescue) | Diagnose designs that won't express and suggest corrected variants — the workflow Adaptyv published, implemented | ✅ built |
 | [`preflight`](packages/preflight) | Pre-submission linter: catch format/platform errors before they cost a paid well | ✅ built |
 
-**Every specced tool is now built** — see the [roadmap](docs/action-plans/00-roadmap.md).
+**Every specced tool is now built and green.**
 
 ## 60-second demo
 
@@ -72,7 +72,10 @@ The suite is a `uv` workspace. Every tool depends on a single package,
 statistics, reporting). Pydantic contracts are **frozen first** so each tool can
 be built and tested independently against synthetic fixtures. See
 [docs/shared-components.md](docs/shared-components.md) and
-[ADR 0001](docs/decisions/0001-monorepo-uv-workspace.md).
+[ADR 0001](docs/decisions/0001-monorepo-uv-workspace.md). It also follows
+[Adaptyv's own repo conventions](docs/TECHNICAL.md#4-aligned-with-adaptyvs-own-conventions)
+(uv, ruff, mypy --strict, MIT, matching env var names) so a future integration
+is a documented swap, not a rewrite.
 
 ```
 packages/
@@ -91,10 +94,12 @@ packages/
   expression-rescue/  developability diagnosis + rescue (spec I)
   preflight/          pre-submission linter          (spec C)
 docs/
-  shared-components.md   which components are shared, and why there is one base
-  action-plans/          per-project plans (00-roadmap.md is the index)
-  decisions/             architecture decision records (ADR)
-  loom-script.md         the video scripts
+  TECHNICAL.md / VULGARISATION.md   whole-suite overview (English / French)
+  shared-components.md              which components are shared, and why
+  decisions/                        architecture decision records (ADR)
+  submission/                       pitch, speech, evaluation guide
+  site/                             the mini-site (novice / expert toggle)
+  guides/                           user guides — one per tool, task-oriented
 ```
 
 Every package carries the same documentation set:
@@ -102,9 +107,7 @@ Every package carries the same documentation set:
 - `README.md` — how to use it;
 - `docs/technical.md` — detailed technical reference (architecture, algorithms, data flow);
 - `docs/vulgarisation.md` — a plain-language explanation (in French) for a general audience;
-- `docs/limitations.md` — what it deliberately does not claim (where applicable);
-- `JOURNAL.md` — a build logbook with the exact commands run, so the work can be
-  followed and reproduced step by step.
+- `docs/limitations.md` — what it deliberately does not claim (where applicable).
 
 ## Quality & security
 
@@ -135,14 +138,14 @@ dissociation split, and QC thresholds need real labelled curves to be calibrated
 That honesty mirrors Adaptyv's own posts, which publish confidence intervals and
 negative results.
 
-## Roadmap
+## What to look at first
 
-Simplest first, then by the ranking from the specs. Two later ideas are as strong
-as the flagship: **adaptyv-pipeline (L)** — making the wet lab a reproducible
-Nextflow step, which no other CRO can offer because none has an API — and
-**protviz (O)**, the visualisation layer these tools already share. Full plan and
-the four newest specs (L, M, N, O) in
-[docs/action-plans/00-roadmap.md](docs/action-plans/00-roadmap.md).
+Two ideas are as strong as the flagship: **adaptyv-pipeline (L)** — making the wet
+lab a reproducible Nextflow step, which no other CRO can offer because none has an
+API — and **protviz (O)**, the visualisation layer these tools already share. See
+[docs/submission/README.md](docs/submission/README.md) for a guided, 3-minute path
+through the whole suite, or [docs/guides/](docs/guides/) for a practical, per-tool
+user guide.
 
 ## Ground rules
 
