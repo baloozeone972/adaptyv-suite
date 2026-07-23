@@ -40,7 +40,9 @@ policy = Policy(
 guard = Guard(policy=policy, budget=Budget(20_000))
 lab = GuardedLab(FoundryClient(transport, token), guard)
 
-result = lab.submit(request)   # estimate -> authorize -> reserve -> submit -> audit
+# estimate -> authorize -> reserve -> create-and-confirm (real API's one-shot
+# auto_accept_quote path) -> commit -> audit, all in this one call
+result = lab.submit(request, name="PD-L1 affinity panel")
 result.allowed, result.reason
 ```
 

@@ -8,20 +8,19 @@ sequences (via adaptyv-kinetics) with deterministic pseudo-affinities. It is
 (estimate, guardrails, resume, tracker) run end-to-end offline and are testable.
 Every simulated package carries the synthetic-data banner when rendered.
 
-## Real backend not exercised here — and now fact-checked, not just assumed
+## Real backend is now wire-compatible; still needs a live token to exercise
 
-`FoundryBackend` + `HttpTransport` implement a **simplified** REST shape and need
-a token and network, so they are excluded from the test suite (the client logic
-is fully tested via a fake transport). Checked against `adaptyvbio/adaptyv-sdk`'s
-real source (2026-07): the actual API has a two-step experiment lifecycle
-(`create()` then `confirm_quote()`/`submit()`, via a typed `ExperimentsAPI`, not
-this repo's single `submit()`), and **results arrive via a `data_package_url`
-field on `ResultInfo`** (fetched through `get_results()`), not a direct
-`/experiments/{id}/package` endpoint as `download_package()` assumes here. The
-fix is a genuine adapter — wrap the real SDK client behind this repo's
-`Transport` protocol — not a request-shape tweak. See
-[foundry-guard/docs/limitations.md](../../foundry-guard/docs/limitations.md#adaptyv_corefoundry-is-a-simplified-shape-not-the-real-foundry-contract)
-for the full comparison.
+`FoundryBackend` submits via `create_experiment(..., auto_confirm=True)` and
+fetches the package by following `ResultInfo.data_package_url` — both matching
+`adaptyvbio/adaptyv-sdk`'s real source (verified, 2026-07), not assumed. It
+still needs a real token and network to run, so it's excluded from the test
+suite the same way `HttpTransport` is (`# pragma: no cover`); every other line
+of the client logic (payload shapes, the lifecycle, cost conversion) is tested
+via a fake transport shaped exactly like the real API. See
+[adaptyv-core/docs/limitations.md](../../adaptyv-core/docs/limitations.md)
+for the full comparison and what remains genuinely out of scope (targets,
+sequences-as-a-resource, quotes list, feedback, info/health — none of this
+suite's tools need them).
 
 ## Scope
 

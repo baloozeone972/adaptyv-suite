@@ -36,22 +36,37 @@ def test_simulated_fetch_is_parseable(tmp_path: Path) -> None:
 
 
 class _FakeTransport:
+    """Real-shaped responses: cents under `breakdown`, `data_package_url` in results."""
+
+    def __init__(self) -> None:
+        self._status: dict[str, str] = {}
+
     def post(self, path: str, payload: dict[str, object], token: str) -> dict[str, object]:
         if path.endswith("cost-estimate"):
-            return {"experiment_type": "affinity", "n_sequences": 2, "total_usd": 500.0}
-        return {"experiment_id": "exp-9", "status": "InQueue"}
+            return {"breakdown": {"total_cents": 50000}}
+        if path == "/experiments":
+            self._status["exp-9"] = "waiting_for_materials"
+            return {"experiment_id": "exp-9"}
+        return {}  # pragma: no cover
 
     def get(self, path: str, token: str) -> dict[str, object]:
-        return {"experiment_id": "exp-9", "status": "Done"}
+        if path.endswith("/results"):
+            return {"items": [{"data_package_url": "https://signed.example/pkg.zip"}]}
+        exp_id = path.rsplit("/", 1)[-1]
+        return {"id": exp_id, "status": self._status.get(exp_id, "done")}
 
-    def get_bytes(self, path: str, token: str) -> bytes:
+    def get_bytes(self, path: str, token: str) -> bytes:  # pragma: no cover
+        return b""
+
+    def fetch_url(self, url: str) -> bytes:
         return b"ZIPBYTES"
 
 
 def test_foundry_backend_delegates(tmp_path: Path) -> None:
     backend = FoundryBackend(FoundryClient(_FakeTransport(), "tok"))
     assert backend.estimate(_CONFIG).total_usd == 500.0
-    assert backend.submit(_CONFIG) == "exp-9"
-    assert backend.poll("exp-9") == ExperimentStatus.DONE
-    dest = backend.fetch_package("exp-9", _CONFIG, tmp_path / "p.zip")
+    experiment_id = backend.submit(_CONFIG)
+    assert experiment_id == "exp-9"
+    assert backend.poll(experiment_id) == ExperimentStatus.WAITING_FOR_MATERIALS
+    dest = backend.fetch_package(experiment_id, _CONFIG, tmp_path / "p.zip")
     assert dest.read_bytes() == b"ZIPBYTES"

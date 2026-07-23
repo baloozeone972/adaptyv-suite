@@ -3,6 +3,11 @@
 The simulator fabricates a schema-conformant package from the requested
 sequences (via adaptyv-kinetics), so the whole pipeline runs end-to-end offline
 and deterministically — declared as simulated, never presented as real.
+
+`FoundryBackend` uses the real API's one-shot `auto_confirm=True` submission
+path (see `adaptyv_core.foundry.FoundryClient.create_experiment`) and follows
+`ResultInfo.data_package_url` to fetch the package — both verified against
+`adaptyv-sdk`'s source, not assumed.
 """
 
 from __future__ import annotations
@@ -59,7 +64,12 @@ class SimulatedBackend:
 
 
 class FoundryBackend:
-    """Real lab via the Foundry API."""
+    """Real lab via the Foundry API.
+
+    `submit` uses `create_experiment(..., auto_confirm=True)` — the real API's
+    one-shot path — so the whole spend happens at one call, matching how the
+    guard/pipeline gate a single atomic submission.
+    """
 
     def __init__(self, client: FoundryClient) -> None:
         self._client = client
@@ -68,10 +78,12 @@ class FoundryBackend:
         return self._client.cost_estimate(_to_request(config))
 
     def submit(self, config: StepConfig) -> str:
-        return self._client.submit(_to_request(config)).experiment_id
+        name = f"{config.experiment_type.value} — {len(config.sequences)} designs"
+        handle = self._client.create_experiment(_to_request(config), name, auto_confirm=True)
+        return handle.experiment_id
 
     def poll(self, experiment_id: str) -> ExperimentStatus:
-        return self._client.status(experiment_id).status
+        return self._client.get_experiment(experiment_id).status
 
     def fetch_package(self, experiment_id: str, config: StepConfig, dest: Path) -> Path:
         return self._client.download_package(experiment_id, dest)

@@ -2,8 +2,14 @@
 
 The agent does not have to cooperate. Every submission goes through: cost estimate
 → authorize (scope + per-call + budget) → human escalation if required → reserve →
-submit → commit → audit. Any failure is default-deny and the budget is never
-touched. Spending is reservation-based, so no call sequence can exceed the cap.
+create-and-confirm → commit → audit. Any failure is default-deny and the budget is
+never touched. Spending is reservation-based, so no call sequence can exceed the cap.
+
+Submission uses the real API's one-shot `auto_confirm=True` path
+(`FoundryClient.create_experiment`, which sets `auto_accept_quote` + `skip_draft`)
+so the entire spend happens at one call the guard can gate atomically — see
+`adaptyv_core.foundry` for why that path was chosen over the granular
+create/submit/confirm-quote sequence.
 """
 
 from __future__ import annotations
@@ -45,8 +51,12 @@ class GuardedLab:
         self._guard = guard
         self._approval = approval
 
-    def submit(self, request: AssayRequest) -> GuardedResult:
-        """Estimate, authorize, (escalate), reserve, submit, commit — or default-deny."""
+    def submit(self, request: AssayRequest, name: str) -> GuardedResult:
+        """Estimate, authorize, (escalate), reserve, create+confirm, commit — or deny.
+
+        `name` is required by the real API (`CreateExpRequest.name`) — pass a
+        human-readable label for the experiment.
+        """
         amount = self._client.cost_estimate(request).total_usd
         decision = self._guard.authorize(request.experiment_type, amount)
         if not decision.allowed:
@@ -58,7 +68,7 @@ class GuardedLab:
         if reservation is None:  # pragma: no cover - budget re-checked; guards a race
             return GuardedResult(allowed=False, reason="no budget headroom", amount_usd=amount)
         try:
-            handle = self._client.submit(request)
+            handle = self._client.create_experiment(request, name, auto_confirm=True)
         except Exception:
             self._guard.budget.release(reservation)
             self._guard.journal.append("submit_failed", {"amount_usd": amount})

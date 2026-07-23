@@ -53,7 +53,7 @@ def demo(
         ("another small affinity (6)", _request(AssayType.AFFINITY, 6)),
     ]
     for label, request in scenario:
-        result = lab.submit(request)
+        result = lab.submit(request, name=label)
         mark = "ALLOW" if result.allowed else "DENY "
         typer.echo(f"{mark} ${result.amount_usd:>7,.0f}  {label:32} — {result.reason}")
 

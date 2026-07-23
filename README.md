@@ -165,4 +165,6 @@ expert depth.
 
 [MIT](LICENSE) © 2026 Laurent ROSA-ARSENE. The author retains copyright, so the
 work can be **assigned to Adaptyv Bio in full at any time** should we agree to it;
-until then MIT lets Adaptyv use, run and build on it without restriction.
+until then MIT lets Adaptyv use, run and build on it without restriction. See
+[NOTICE.md](NOTICE.md) for the one deliberate case of reading Adaptyv's own
+(also MIT) `adaptyv-sdk` source to make the Foundry client wire-compatible.

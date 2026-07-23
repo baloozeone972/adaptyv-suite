@@ -1,36 +1,31 @@
 # Known limitations — foundry-guard
 
-## `adaptyv_core.foundry` is a simplified shape, not the real Foundry contract
+## `adaptyv_core.foundry` is now wire-compatible (was a simplified guess)
 
-Verified against `adaptyvbio/adaptyv-sdk`'s source (its `client/foundry.py` and
-generated types, 2026-07) — not guessed. The real client exposes seven typed
-resources (`ExperimentsAPI`, `TargetsAPI`, `ResultsAPI`, `QuotesAPI`, `TokensAPI`,
-`SequencesAPI`, `FeedbackAPI`) with a **two-step** experiment lifecycle
-(`create()` → a quote → `confirm_quote()` / `submit()`), not the single
-`submit()` this repo models. Concretely, `GuardedLab.submit` would need to
-become `estimate → guard.authorize → create (unconfirmed) → confirm_quote`,
-still gated the same way. This is a genuine adapter, not a config change — see
-"Real integration path" below.
+`GuardedLab.submit` uses `FoundryClient.create_experiment(..., auto_confirm=True)`
+— the real API's one-shot `auto_accept_quote` + `skip_draft` path — so the whole
+spend still happens at one call the guard gates atomically (estimate → authorize
+→ reserve → create-and-confirm → commit), matching this file's original design
+intent. The request/response shapes underneath are now the real, verified ones
+(see `adaptyv-core/docs/limitations.md` for the full comparison against
+`adaptyvbio/adaptyv-sdk`'s source) rather than an assumed REST shape.
 
-## Token attenuation is real and richer than assumed
+Not implemented here (deliberately, matching `adaptyv-core`'s stated scope):
+the manual multi-step flow (`create(auto_confirm=False)` → `submit_experiment`
+→ `confirm_quote`, all present on `FoundryClient` for parity) is not wired into
+`GuardedLab`, which only ever uses the one-shot path — a human-in-the-loop
+manual-quote-review flow would use those methods directly against the guard's
+`authorize`, without needing `GuardedLab` at all.
 
-`AttenuateTokenRequest`/`AttenuationSpec` exist in the real SDK with
-cryptographically enforced, **append-only** narrowing (`allowed_actions`,
-`allowed_org_ids`, `allowed_resources` — attenuation can only narrow access,
-never expand it). That's a stronger guarantee than this repo's guard alone
-provides today; wiring `TokensAPI.attenuate()` so the agent only ever holds a
-narrowed token is the natural pairing with `Guard` (belt and suspenders: the
-token can't do it even if the proxy is bypassed).
+## Token attenuation exists on the client; not yet wired into the guard
 
-## Real integration path
-
-Two options, in order of preference:
-1. **Wrap their `Lab`/`FoundryClient`** behind this repo's `Transport` protocol —
-   reuse their maintained, spec-drift-tested client (`adaptyv-sdk` runs a weekly
-   CI job diffing its generated types against the live OpenAPI spec) instead of
-   re-implementing REST calls here.
-2. Re-implement `HttpTransport` directly against their OpenAPI spec — more
-   control, but duplicates what their SDK already solves and can drift from it.
+`FoundryClient.attenuate_token` is implemented and wire-compatible (real,
+cryptographically append-only narrowing — `allowed_actions`, `allowed_org_ids`,
+`allowed_resources` — that can only shrink access, never expand it). It is not
+yet called anywhere in `GuardedLab`: handing the agent a narrowed token instead
+of the root one (belt and suspenders — the token can't overreach even if the
+proxy is bypassed) is a natural, small addition (mint once at `GuardedLab`
+construction, or per-session) but isn't wired in yet.
 
 ## The MCP HTTP shell is not built
 

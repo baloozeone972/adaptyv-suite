@@ -72,9 +72,9 @@ class PipelineStep:
 
     def _collect(self, state: RunState, config: StepConfig) -> RunState:
         status = self._backend.poll(state.experiment_id or "")
-        if status == ExperimentStatus.FAILED:
+        if status == ExperimentStatus.CANCELED:
             state.status = RunStatus.FAILED
-            state.note("experiment failed")
+            state.note("experiment canceled")
             return self._save(state, config)
         if status != ExperimentStatus.DONE:
             state.note(f"still running ({status.value}); resume later")

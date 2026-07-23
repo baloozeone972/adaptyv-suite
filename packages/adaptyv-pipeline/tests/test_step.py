@@ -59,8 +59,8 @@ def test_execute_runs_to_done(tmp_path: Path) -> None:
     assert Path(state.package_path).exists()
 
 
-def test_failed_experiment(tmp_path: Path) -> None:
-    backend = _StubBackend(poll_status=ExperimentStatus.FAILED)
+def test_canceled_experiment(tmp_path: Path) -> None:
+    backend = _StubBackend(poll_status=ExperimentStatus.CANCELED)
     state = PipelineStep(backend, tmp_path).run(_config(dry_run=False))
     assert state.status == RunStatus.FAILED
 
