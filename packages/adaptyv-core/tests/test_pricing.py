@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import pytest
 from adaptyv_core.pricing import PROTEINBASE_DISCOUNT, plate_tier_for, price
 from adaptyv_core.schemas import AssayType
 
@@ -29,3 +30,10 @@ def test_publish_discount() -> None:
     full = price(AssayType.AFFINITY, 96).total_usd
     discounted = price(AssayType.AFFINITY, 96, publish=True).total_usd
     assert abs(discounted - full * (1 - PROTEINBASE_DISCOUNT)) < 1e-6
+
+
+def test_unpriced_assay_raises_rather_than_guessing() -> None:
+    # Real assay types (matching adaptyv-sdk's ExperimentType) with no pricing data yet.
+    for unpriced in (AssayType.FLUORESCENCE, AssayType.EPITOPE_BINNING, AssayType.ENZYME_ACTIVITY):
+        with pytest.raises(ValueError, match="No pricing data"):
+            price(unpriced, 24)

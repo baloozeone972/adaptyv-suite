@@ -13,6 +13,9 @@ from dataclasses import dataclass
 from adaptyv_core.schemas import AssayType, PlateTier
 
 # Approximate per-well USD price and turnaround per assay. Calibratable.
+# FLUORESCENCE, EPITOPE_BINNING and ENZYME_ACTIVITY exist in the real API
+# (adaptyv-sdk's ExperimentType) but have no published pricing data here yet —
+# deliberately absent rather than guessed; price() raises ValueError for them.
 UNIT_PRICE_USD: dict[AssayType, float] = {
     AssayType.EXPRESSION: 79.0,
     AssayType.SCREENING: 129.0,
@@ -59,7 +62,12 @@ def price(
 
     >>> price(AssayType.AFFINITY, 70).total_usd
     16224.0
+
+    Raises ValueError for an assay with no published pricing data here
+    (currently FLUORESCENCE, EPITOPE_BINNING, ENZYME_ACTIVITY) rather than guessing.
     """
+    if assay not in UNIT_PRICE_USD:
+        raise ValueError(f"No pricing data for {assay.value!r} yet; see pricing.py")
     wells = n_designs * replicates
     tier = plate_tier_for(wells)
     unit = UNIT_PRICE_USD[assay]

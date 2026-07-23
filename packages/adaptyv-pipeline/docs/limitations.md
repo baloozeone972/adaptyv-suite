@@ -8,12 +8,20 @@ sequences (via adaptyv-kinetics) with deterministic pseudo-affinities. It is
 (estimate, guardrails, resume, tracker) run end-to-end offline and are testable.
 Every simulated package carries the synthetic-data banner when rendered.
 
-## Real backend not exercised here
+## Real backend not exercised here — and now fact-checked, not just assumed
 
-`FoundryBackend` + `HttpTransport` implement the real API calls but need a token
-and network, so they are excluded from the test suite (the client logic is fully
-tested via a fake transport). The exact request/response shapes should be
-reconciled against the live API before production use.
+`FoundryBackend` + `HttpTransport` implement a **simplified** REST shape and need
+a token and network, so they are excluded from the test suite (the client logic
+is fully tested via a fake transport). Checked against `adaptyvbio/adaptyv-sdk`'s
+real source (2026-07): the actual API has a two-step experiment lifecycle
+(`create()` then `confirm_quote()`/`submit()`, via a typed `ExperimentsAPI`, not
+this repo's single `submit()`), and **results arrive via a `data_package_url`
+field on `ResultInfo`** (fetched through `get_results()`), not a direct
+`/experiments/{id}/package` endpoint as `download_package()` assumes here. The
+fix is a genuine adapter — wrap the real SDK client behind this repo's
+`Transport` protocol — not a request-shape tweak. See
+[foundry-guard/docs/limitations.md](../../foundry-guard/docs/limitations.md#adaptyv_corefoundry-is-a-simplified-shape-not-the-real-foundry-contract)
+for the full comparison.
 
 ## Scope
 

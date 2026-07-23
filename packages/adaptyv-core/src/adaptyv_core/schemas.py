@@ -14,12 +14,21 @@ from pydantic import BaseModel, Field
 
 
 class AssayType(StrEnum):
-    """The experiment types Adaptyv offers."""
+    """The experiment types Adaptyv offers.
+
+    Matches `adaptyvbio/adaptyv-sdk`'s generated `ExperimentType` enum exactly
+    (verified against its source, 2026-07). `EPITOPE_BINNING` and
+    `ENZYME_ACTIVITY` have no pricing/turnaround data in `adaptyv_core.pricing`
+    yet — using them with `pricing.price()` raises rather than guessing.
+    """
 
     SCREENING = "screening"
     AFFINITY = "affinity"
     EXPRESSION = "expression"
     THERMOSTABILITY = "thermostability"
+    FLUORESCENCE = "fluorescence"
+    EPITOPE_BINNING = "epitope_binning"
+    ENZYME_ACTIVITY = "enzyme_activity"
 
 
 class Method(StrEnum):

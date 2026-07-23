@@ -77,6 +77,15 @@ official Foundry SDK):
 Concretely: a token exported as `ADAPTYV_API_KEY` for the official SDK works here
 unchanged — `adaptyv_core.config.Settings.from_env()` reads the identical variable.
 
+**What is *not* yet aligned:** `adaptyv_core.foundry`'s request/response shapes are
+a simplified abstraction, not the real Foundry contract — checked against
+`adaptyv-sdk`'s actual client (seven typed resources, a two-step
+create→confirm-quote experiment lifecycle, results delivered via a
+`data_package_url` field), not assumed. Wiring the real API is a genuine adapter
+(wrap their client behind this repo's `Transport` protocol), not a config
+change. Full comparison in
+[foundry-guard's limitations](../packages/foundry-guard/docs/limitations.md).
+
 ## 5. How data flows through the tools
 
 - **Before the lab:** `preflight` and `expression-rescue` validate and diagnose designs;
