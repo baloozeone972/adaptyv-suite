@@ -64,3 +64,14 @@ saturate binding — surfaced, not hidden.
 100% coverage. The synthetic generator doubles as the validation harness (known
 true parameters); a `hypothesis` test asserts the fitter stays finite and never
 crashes across varied K_D / noise / seed.
+
+## Domain model
+
+Bounded context: **Kinetics Analysis** — the suite's **core domain** (the deepest,
+most differentiating logic: `Trace`, `KineticFit`, `QCFlag`, `TraceVerdict`).
+Consumes a *downloaded* binding data package (a file, parsed by `io/`), not a live
+Foundry call — so it has no direct relationship to the Foundry ACL in
+`adaptyv-core.foundry`. It is upstream of two contexts via **Customer/Supplier**:
+`sensorgram-triage` (Curve Triage) depends on its fits, and `protviz`
+(Visualisation, an **Open Host Service**) is depended on *by* this package for
+figures. See [the DDD doc](../../../docs/architecture/domain-driven-design.md).

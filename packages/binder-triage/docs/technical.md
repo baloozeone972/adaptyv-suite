@@ -50,3 +50,11 @@ Real bind-probability model (LightGBM + ESM on Proteinbase, calibrated), grouped
 sequence cluster **and** campaign, DPP/ILP selection variants, and expression-aware
 two-stage selection. The **selection-bias caveat** — published designs already passed
 an in-silico filter — must be stated on real data.
+
+## Domain model
+
+Bounded context: **Selection** — a supporting subdomain downstream of
+Developability, in a **Customer/Supplier** relationship with `dbtl-agent`
+(the Autonomous Loop consumes its `diverse_greedy` selection, one-way and
+versioned). Core aggregates: `Candidate`, `Selection`. See
+[the DDD doc](../../../docs/architecture/domain-driven-design.md).

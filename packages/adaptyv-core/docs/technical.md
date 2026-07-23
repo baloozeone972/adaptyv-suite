@@ -45,3 +45,14 @@ lets the tools be built and tested in isolation against synthetic fixtures.
 
 100% line coverage. Property-based tests (`hypothesis`) on the FASTA round-trip and
 the validation alphabet. See `tests/`.
+
+## Domain model
+
+Two roles at once: the **Shared Kernel** (`schemas`, `seq`, `biophysics`, `stats`,
+`report` — deliberately shared, versioned, changed rarely) and the **Anti-Corruption
+Layer** for the upstream Foundry context (`foundry.py` — translates Adaptyv's real
+`Experiment`/`Quote`/`Result` model into this suite's own shapes; see §5 of
+[the DDD doc](../../../docs/architecture/domain-driven-design.md) for the verified,
+line-by-line translation). `guard.py` is a third, generic-subdomain concern
+(budget/audit) that happens to live here because `foundry-guard` and `dbtl-agent`
+both need it.

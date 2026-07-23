@@ -43,3 +43,13 @@ FASTA ─▶ parse_fasta ─▶ validate_campaign ─▶ PreflightReport ─▶ 
 ## Testing
 
 100% coverage; every rule has a dedicated test, plus CLI exit-code and JSON tests.
+
+## Domain model
+
+Bounded context: **Submission Validation** — a supporting subdomain gating entry
+into the whole suite. `ProteinDesign`, `Issue`, `Verdict` are Shared Kernel types
+(`adaptyv-core.schemas`); this package adds no new domain concepts, only rules over
+them. No relationship to Adaptyv's own Foundry model — validation happens entirely
+before an `Experiment` would exist. See
+[the DDD doc](../../../docs/architecture/domain-driven-design.md) for how this
+context relates to the rest of the suite.

@@ -31,9 +31,13 @@ reporting).
   does *not* claim; all demo data is synthetic and declared on every report. When the
   fitter can't identify a parameter, the tool says so instead of printing a confident
   number.
-- **Built for your reality, not a toy.** External systems (Foundry, Mosaic, Proteinbase,
-  GPU) sit behind protocols with fakes, so the whole thing runs offline and deterministically
-  today, and the real integration is a documented swap — not a rewrite.
+- **Built for your reality, not a toy.** External systems sit behind protocols with fakes,
+  so the whole thing runs offline and deterministically today. For Foundry specifically,
+  I didn't stop at that abstraction: I read `adaptyv-sdk`'s actual source and rewrote the
+  client to be wire-compatible — real endpoint paths, the real create→confirm-quote
+  lifecycle, real cost-in-cents, real result delivery via `data_package_url`. It needs a
+  live token to touch your network, but the request/response shapes are no longer a guess.
+  Mosaic and Proteinbase remain documented gaps (no equivalent public SDK to check against).
 
 ## The one-line version
 

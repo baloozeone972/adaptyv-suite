@@ -56,3 +56,12 @@ are Adaptyv's review decisions.
 
 100% coverage. Fixtures compute the (costly) calibration once per session; a
 `hypothesis`-free but deterministic model makes assertions stable.
+
+## Domain model
+
+Bounded context: **Curve Triage** — a supporting subdomain in a
+**Customer/Supplier** relationship with Kinetics Analysis (`adaptyv-kinetics`):
+it consumes `Trace`/`KineticFit` outputs, one-way and versioned, and adds its
+own aggregates on top — `TriageResult`, `Pile`, `DelegationCurve`. It does not
+touch the Foundry ACL directly. See
+[the DDD doc](../../../docs/architecture/domain-driven-design.md).

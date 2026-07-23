@@ -58,10 +58,10 @@ that never cycle: kinetics→protviz, H→kinetics, B→binder-triage). See
 
 ## 4. Aligned with Adaptyv's own conventions
 
-To make a future integration a documented swap rather than a rewrite, this repo
-follows the same conventions as Adaptyv's public Python repos (checked against
-[`adaptyvbio/adaptyv-sdk`](https://github.com/adaptyvbio/adaptyv-sdk), the
-official Foundry SDK):
+This repo follows the same tooling conventions as Adaptyv's public Python repos,
+and its Foundry client is wire-compatible with the real API — both checked
+against [`adaptyvbio/adaptyv-sdk`](https://github.com/adaptyvbio/adaptyv-sdk),
+the official Foundry SDK, not assumed:
 
 | Convention | Adaptyv's repos | This repo |
 |---|---|---|
@@ -104,7 +104,7 @@ tools need them. Full comparison in
 ## 6. Quality & security
 
 `make all` = `ruff` (lint+format) + `mypy --strict` + `pytest`. In CI (GitHub Actions):
-**285 tests, 100% line coverage, gated at 98%.** Property-based tests (`hypothesis`) on
+**302 tests, 100% line coverage, gated at 98%.** Property-based tests (`hypothesis`) on
 the FASTA parser, the kinetics fitter, and the budget guardrail. Two real defects were
 found *by the tests* and fixed: a zip path-traversal in the package loader, and the
 Foundry token leaking into a dataclass `repr`. No secret in code; the token is read from

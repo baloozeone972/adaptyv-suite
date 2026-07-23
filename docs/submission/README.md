@@ -38,9 +38,12 @@ Then skim **one** flagship file to judge the code: the independent re-fit,
 - **Is:** thirteen finished tools on one shared foundation, all green in CI, every claim
   carrying its confidence interval, every limitation written down.
 - **Isn't:** a demo of one feature, or anything trained on data I don't have. All demo data
-  is synthetic and **declared** on every report. The real integrations (Foundry API,
-  Mosaic, Proteinbase, GPU) sit behind protocols with fakes — a documented swap, not a
-  rewrite. Each tool's `docs/limitations.md` says exactly where that line is.
+  is synthetic and **declared** on every report. External systems sit behind protocols with
+  fakes so everything runs offline; for Foundry, that client is now wire-compatible —
+  rewritten and verified line-by-line against `adaptyv-sdk`'s real source, not assumed —
+  and just needs a live token to touch the network. Mosaic, Proteinbase and GPU fine-tuning
+  remain documented gaps (no public SDK to check them against). Each tool's
+  `docs/limitations.md` says exactly where every line is.
 
 ## User guides
 

@@ -74,8 +74,8 @@ be built and tested independently against synthetic fixtures. See
 [docs/shared-components.md](docs/shared-components.md) and
 [ADR 0001](docs/decisions/0001-monorepo-uv-workspace.md). It also follows
 [Adaptyv's own repo conventions](docs/TECHNICAL.md#4-aligned-with-adaptyvs-own-conventions)
-(uv, ruff, mypy --strict, MIT, matching env var names) so a future integration
-is a documented swap, not a rewrite.
+(uv, ruff, mypy --strict, MIT, matching env vars) — and its Foundry client is
+wire-compatible with the real API, verified against `adaptyv-sdk`'s source.
 
 ```
 packages/
@@ -115,7 +115,7 @@ Every package carries the same documentation set:
 make all     # ruff + mypy --strict + pytest (this is what CI runs)
 ```
 
-- **285 tests, 100% line coverage**, gated at 98% in CI.
+- **302 tests, 100% line coverage**, gated at 98% in CI.
 - `ruff` (lint + format) and `mypy --strict` clean across all packages.
 - Property-based tests (`hypothesis`) on the parsers and the fitter.
 - Two real issues were found **by the tests** and fixed: a zip path-traversal

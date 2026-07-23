@@ -47,3 +47,12 @@ verdict branches (already-helps, needs-more-data, unreachable, never-beats-base)
 The actual fine-tuning of Boltz-2's affinity head on Proteinbase, the grouped
 leakage-free splitting of real data, and the true per-size scoring. Those need Adaptyv's
 data and GPU compute; the harness is the reusable scaffold around them.
+
+## Domain model
+
+Bounded context: **Fine-tuning Research** — a standalone **Customer/Supplier**
+consumer of the shared base plus a declared synthetic size sweep. Core
+aggregates: `TrainingObservation`, `LearningCurve`, `TuneResult`. No
+relationship to the Foundry ACL — it measures learning-curve shape, not live
+experiments. See
+[the DDD doc](../../../docs/architecture/domain-driven-design.md).

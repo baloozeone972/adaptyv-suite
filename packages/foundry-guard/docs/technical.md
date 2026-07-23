@@ -19,10 +19,15 @@ cli.py               demo
 cost_estimate ─▶ guard.authorize(assay, amount) ─┬─ denied ─▶ default-deny (budget untouched)
                                                  └─ allowed ─▶ needs_approval?
                                                        ├─ yes & gate denies ─▶ deny + audit
-                                                       └─ ok ─▶ budget.reserve ─▶ submit
+                                                       └─ ok ─▶ budget.reserve ─▶ create_experiment(auto_confirm=True)
                                                                      ├─ raises ─▶ release + audit + re-raise
                                                                      └─ ok ─▶ commit + audit "submitted"
 ```
+
+`create_experiment(..., auto_confirm=True)` is the real API's one-shot
+`auto_accept_quote`+`skip_draft` path (see `adaptyv-core.foundry`) — one wire
+call carries the whole spend, so the guard gates it atomically without needing
+to track a multi-step create→submit→confirm-quote sequence itself.
 
 ## Budget: reservation, not accounting
 
@@ -52,3 +57,12 @@ headroom, then the approval flag. Every decision is journaled.
 approval required/granted, submit failure (budget released), and a
 budget-exhaustion sequence. The network transport is out of scope (the demo uses a
 fake); the MCP HTTP shell is future work.
+
+## Domain model
+
+Bounded context: **Governance** — a generic subdomain (`Policy`, `Decision`,
+`Budget`, `AuditJournal` live in the Shared Kernel `adaptyv_core.guard`; this
+package is its Foundry-facing **Conformist**, sitting directly on the Foundry
+ACL rather than re-wrapping it). Shares the guard engine with `dbtl-agent` via
+the Shared Kernel relationship. See
+[the DDD doc](../../../docs/architecture/domain-driven-design.md).

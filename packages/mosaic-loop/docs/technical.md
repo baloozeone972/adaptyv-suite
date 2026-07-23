@@ -46,3 +46,12 @@ that recalibration never lowers objective agreement. Report + CLI covered.
 A live Mosaic adapter (reading its actual objective-term API and writing back calibrated
 terms) needs Mosaic installed; here the loop runs against a synthetic, declared export.
 The mapping, calibration and drift analysis are Mosaic-agnostic and transfer unchanged.
+
+## Domain model
+
+Bounded context: **External-Model Feedback** — a standalone
+**Customer/Supplier** consumer of the shared base plus a declared synthetic
+export; Mosaic's objective terms are referenced, not owned, by this suite.
+Core aggregates: `DesignMeasurement`, `Calibration`, `DriftReport`. No
+relationship to the Foundry ACL. See
+[the DDD doc](../../../docs/architecture/domain-driven-design.md).

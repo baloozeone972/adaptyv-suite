@@ -54,3 +54,12 @@ directly addressing the TREM2 observation.
 100% coverage. Guarantees: budget never exceeded, tight budget stops early, pool never
 re-tested, audit valid. Learning: agent beats random on average over seeds. Diversity:
 families maintained. Oracle strictness and determinism covered.
+
+## Domain model
+
+Bounded context: **Autonomous Loop** — orchestrates Selection
+(`binder-triage.diverse_greedy`) and Governance (`adaptyv-core.guard`) behind
+a `SimulatedOracle` standing in for a Lab port. Core aggregates: `RoundResult`,
+`CampaignOutcome`, `ClusterBelief`. Shares the guard engine (Shared Kernel)
+with `foundry-guard`; depends on Selection via **Customer/Supplier**. See
+[the DDD doc](../../../docs/architecture/domain-driven-design.md).

@@ -49,3 +49,12 @@ MVP ships discrimination + affinity + selection + cohorts.
 
 100% coverage; metric edge cases (perfect/reversed/single-class/ties), CSV
 round-trip, the ipSAE > pLDDT ranking, small-n handling, and the CLI.
+
+## Domain model
+
+Bounded context: **Predictive Benchmark** — a supporting subdomain, standalone
+**Customer/Supplier** consumer of the shared base plus a declared synthetic
+dataset. Core aggregates: `DesignRecord`, `MetricReport`, `MetricScore`. No
+relationship to the Foundry ACL — it scores in-silico predictions against
+declared ground truth, not live experiments. See
+[the DDD doc](../../../docs/architecture/domain-driven-design.md).

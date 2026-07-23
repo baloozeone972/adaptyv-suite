@@ -30,6 +30,10 @@ transition, so `resume(run_id)` reloads both and re-enters `_advance` from where
 it stopped. Backends are **stateless** (`fetch_package` takes the config), so the
 simulator can regenerate offline and cross-process resume works.
 
+`RunStatus.FAILED` (this pipeline's own domain status, distinct from Foundry's)
+is set when the backend reports `ExperimentStatus.CANCELED` — the real API's
+closest equivalent to failure; there is no separate `failed` status upstream.
+
 ## Guardrails (non-negotiable, property-tested)
 
 1. **Dry-run by default** — nothing is submitted, nothing is spent, without `--execute`.
@@ -42,9 +46,12 @@ simulator can regenerate offline and cross-process resume works.
 - `SimulatedBackend` — fabricates a schema-conformant package from the requested
   sequences via `adaptyv-kinetics` (deterministic pseudo-affinities). Instant, offline,
   declared synthetic. Its output parses with `adaptyv-kinetics`.
-- `FoundryBackend` — wraps `adaptyv_core.foundry.FoundryClient`. Webhooks are
-  HMAC-SHA256 verified on the raw body. The HTTP transport is `# pragma: no cover`
-  (network); all client logic is tested via a fake transport.
+- `FoundryBackend` — wraps `adaptyv_core.foundry.FoundryClient`, wire-compatible
+  with the real API (verified against `adaptyv-sdk`'s source). `submit` uses
+  `create_experiment(..., auto_confirm=True)` — one call carries the whole
+  spend. `fetch_package` follows `list_results()` → `data_package_url`. Webhooks
+  are HMAC-SHA256 verified on the raw body. The HTTP transport is
+  `# pragma: no cover` (network); all client logic is tested via a fake transport.
 
 ## Pipeline integration
 
@@ -56,3 +63,13 @@ simulator can regenerate offline and cross-process resume works.
 
 100% coverage (excluding the network transport). A `StubBackend` with a controllable
 poll status exercises the async submitted→resume→done path.
+
+## Domain model
+
+Bounded context: **Pipeline Orchestration** — a **Conformist** sitting directly on
+the Foundry Anti-Corruption Layer (`adaptyv_core.foundry`), wrapping it as a
+resumable step rather than re-abstracting it. Core aggregates: `StepConfig`,
+`RunState`. `RunState`/`RunStatus` are this package's own domain status,
+deliberately distinct from (and mapped from) Adaptyv's `ExperimentStatus` — see
+the note above on `FAILED`↔`canceled`. See
+[the DDD doc](../../../docs/architecture/domain-driven-design.md).

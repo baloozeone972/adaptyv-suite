@@ -49,3 +49,12 @@ prices and n=96 this is ≈ 0.5.
 cover the yield/cost simulation, the ranking flip across expression rates, the
 budget flag, the crossover (including the None branch via a monkeypatched price),
 and the CLI.
+
+## Domain model
+
+Bounded context: **Campaign Economics** — a supporting subdomain sharing
+`adaptyv_core.pricing` (Shared Kernel) with Selection and Pipeline
+Orchestration. Core aggregates: `Probs`, `StrategyResult`, `CostBreakdown`. It
+simulates against Foundry's pricing model but never calls the Foundry ACL
+itself — it plans before an `Experiment` is created. See
+[the DDD doc](../../../docs/architecture/domain-driven-design.md).

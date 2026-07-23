@@ -60,3 +60,12 @@ FASTA ─▶ validate ─▶ diagnose (per chain) ─▶ risk tier ─▶ [rescu
 
 100% coverage; one test per liability, tier thresholds, per-chain offsets,
 before/after rescue, interface avoidance, and the CLI.
+
+## Domain model
+
+Bounded context: **Developability** — a supporting subdomain downstream of
+Submission Validation (**Shared Kernel**: `ProteinDesign`, `Verdict`). Core
+aggregates: `Liability`, `Variant`, `SequenceReport`. No relationship to
+Adaptyv's Foundry model — every liability is computed from the sequence alone,
+before an `Experiment` exists. See
+[the DDD doc](../../../docs/architecture/domain-driven-design.md).

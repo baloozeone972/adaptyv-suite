@@ -25,12 +25,14 @@ git clone https://github.com/baloozeone972/adaptyv-suite.git && cd adaptyv-suite
 make install && make demo    # synth a binding package, QC it, render an HTML report
 ```
 
-Everything is genuinely finished: 286 tests, 100% coverage, `mypy --strict` and
+Everything is genuinely finished: 302 tests, 100% coverage, `mypy --strict` and
 `ruff` clean, and every claim carries a confidence interval (all demo data is
-synthetic and declared, since I don't have your real data). I also checked my
-work against `adaptyv-sdk`'s actual source rather than assuming — matched its
-conventions where I could (env vars, tooling), and wrote down precisely where a
-real adapter would still be needed, in each package's `docs/limitations.md`.
+synthetic and declared, since I don't have your real data). I also read
+`adaptyv-sdk`'s actual source rather than assuming, and rewrote the Foundry
+client to be wire-compatible with it (real endpoints, real lifecycle, real cost
+units) — it just needs a live token to touch your network. What's still a
+documented gap (Mosaic, Proteinbase, GPU fine-tuning) is written down precisely
+in each package's `docs/limitations.md`.
 
 Happy to walk through any of it live, and to talk about which piece would be
 most useful to build out further.
@@ -54,9 +56,10 @@ and guardrails, an autonomous DBTL loop, and more.
 - Repo: https://github.com/baloozeone972/adaptyv-suite
 - Loom: https://www.loom.com/share/laurent-rosa-arsene-adaptyv
 
-`make install && make demo` gets you a working report in under a minute. 286
+`make install && make demo` gets you a working report in under a minute. 302
 tests, 100% coverage, everything honestly labelled (synthetic data declared,
-limitations written down per tool).
+limitations written down per tool, and the Foundry client rewritten to be
+wire-compatible with your real SDK).
 
 Happy to talk through it whenever works.
 

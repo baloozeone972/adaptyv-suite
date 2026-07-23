@@ -48,3 +48,12 @@ passes unchanged after delegating here — the refactor is behaviour-preserving.
 Structure viewers coloured by an experimental measurement (Mol*/3Dmol export) are in the
 spec; they need a JS/structure toolchain and are the natural next addition. The current
 scope is the 2-D domain figures, which cover G/A/H/I/D today.
+
+## Domain model
+
+Bounded context: **Visualisation** — a **generic subdomain** by design: `Series`
+is an array-in/PNG-out value object, deliberately carrying no domain concepts
+(no `Trace`, no `KineticFit`). Exposed to `adaptyv-kinetics` as an **Open Host
+Service** — kinetics depends on protviz, never the reverse (the no-cycle
+contract above). See
+[the DDD doc](../../../docs/architecture/domain-driven-design.md).
