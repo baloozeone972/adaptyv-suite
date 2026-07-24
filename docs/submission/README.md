@@ -16,7 +16,7 @@ This folder is your fast path in.
 make install         # uv sync --all-packages   (~30s)
 make demo            # synth a binding package, QC it, render report.html
 open /tmp/adaptyv_demo.html
-make all             # the quality gate: ruff + mypy --strict + 285 tests, 100% coverage
+make all             # the quality gate: ruff + mypy --strict + 302 tests, 100% coverage
 ```
 
 Then skim **one** flagship file to judge the code: the independent re-fit,
