@@ -32,7 +32,7 @@ Le récit produit de A, avec le beat honnêteté / tests / sécurité à la fin.
 | **1:10** | "Every replicate gets a verdict — pass, review, or reject. Here are the raw sensorgrams with my independent fit overlaid. This one is flagged INCOMPLETE_DISSOCIATION: the dissociation is too short, so k_off — and therefore K_D — simply isn't identifiable. The tool says so, instead of printing a confident, wrong number." | Scroll : bandeau → tableau verdicts → un sensorgramme *reject*. |
 | **1:50** | "It's an independent verifier, not a competitor to your fitting pipeline. Where my re-fit agrees with your package's values, that's evidence of quality. Where it diverges — here, R_max — it's because these concentrations don't saturate binding, so R_max isn't well determined. The tool surfaces that rather than hiding it." | `adaptyv-kinetics compare package.zip` — pointe la colonne `rmax_pct_diff`. |
 | **2:20** | "Everything you just saw runs on synthetic data I generate in the repo — and it's declared on every single report — because I don't have one of your real packages. That same generator is my validation harness: the true parameters are known, so I can measure the fitter's recovery error." | Pointe le bandeau « Synthetic data » du rapport. |
-| **2:40** | "I let the tests drive the hardening, and they found two real issues: a path-traversal in the package loader — a malicious zip could have escaped the temp folder — and the Foundry token leaking into a debug repr. Both fixed, both regression-tested. A hundred-and-two tests, full coverage, gated in CI, strict types throughout." | `make all` — laisse défiler jusqu'au vert « 100% ». |
+| **2:40** | "I let the tests drive the hardening, and they found two real issues: a path-traversal in the package loader — a malicious zip could have escaped the temp folder — and the Foundry token leaking into a debug repr. Both fixed, both regression-tested. Three hundred and two tests, full coverage, gated in CI, strict types throughout." | `make all` — laisse défiler jusqu'au vert « 100% ». |
 | **3:20** | "And I wrote the limits down: R_max needs saturation, drift detection needs your known association/dissociation split, and the QC thresholds need your labelled curves to be calibrated. That's exactly what I'd do with access to your internal data — and it's the honesty your own blog posts already practise." | Retour caméra. |
 | **3:35** | "A small, finished tool your support team could recommend tomorrow — and the starting point for the rest." | Caméra, sourire, fin. |
 
@@ -50,9 +50,9 @@ Pour montrer l'ampleur : une base commune, plusieurs outils, une roadmap.
 | **1:45** | "The flagship is adaptyv-kinetics. Here's what a binding customer receives — and one command turns it into a report." | `unzip -l package.zip \| head -15` puis `adaptyv-kinetics report package.zip -o report.html` ; `open report.html`. |
 | **2:20** | "Every replicate gets a verdict. Raw sensorgrams with my independent fit on top. This one is flagged INCOMPLETE_DISSOCIATION — k_off isn't identifiable, and the tool says so rather than inventing a number." | Scroll : verdicts → un sensorgramme *reject*. |
 | **2:50** | "And it's an independent verifier: where my re-fit agrees with your reported values it's evidence of quality; where R_max diverges, it's because the concentrations don't saturate — surfaced, not hidden." | `adaptyv-kinetics compare package.zip` |
-| **3:20** | "All of it is finished where it counts: a hundred-and-two tests, full coverage gated in CI, strict types — and the tests caught two real security bugs, a zip path-traversal and a token leak, both fixed. Everything runs on synthetic data I generate and declare." | `make all` — jusqu'au vert. |
-| **3:55** | "And it's planned where it grows. Eleven more tools are specced and prioritised against frictions in your material. Two stand out: adaptyv-pipeline — making your lab a reproducible Nextflow step, which no other CRO can offer because no other CRO has your API — and protviz, a visualisation layer these tools already share." | Montre `docs/action-plans/00-roadmap.md`. |
-| **4:40** | "Finished where it counts, planned where it grows. With access to your internal data, the first thing I'd do is calibrate the QC thresholds and close the pipeline loop." | Retour caméra, fin. |
+| **3:20** | "All of it is finished, not just this one tool: three hundred and two tests, full coverage gated in CI, strict types — and the tests caught two real security bugs, a zip path-traversal and a token leak, both fixed. Everything runs on synthetic data I generate and declare." | `make all` — jusqu'au vert. |
+| **3:55** | "All thirteen tools are done, not specced — same bar, same coverage, same CI gate. Two stand out: adaptyv-pipeline makes your lab a reproducible Nextflow step, which no other CRO can offer because no other CRO has your API; and for Foundry itself, I didn't stop at an abstraction — I read adaptyv-sdk's actual source and rewrote the client to be wire-compatible: real endpoints, the real create-then-confirm-quote lifecycle, real cost in cents." | Montre l'arbo `packages/`, puis `docs/architecture/domain-driven-design.md` §5 (le tableau de vérification). |
+| **4:40** | "Finished everywhere it counts. The honest gaps left are Mosaic and Proteinbase — no public SDK to check my work against, so I didn't guess there. With access to your internal data, the first thing I'd do is calibrate the QC thresholds against real labelled curves and close the pipeline loop end to end." | Retour caméra, fin. |
 
 ---
 
@@ -93,5 +93,18 @@ phrase montre qu'on a lu la doc jusqu'au bout.
 ## Références internes citées à l'écran
 
 - `docs/shared-components.md` — la base commune
-- `docs/action-plans/00-roadmap.md` — les 13 outils priorisés
+- `docs/architecture/domain-driven-design.md` §5 — le tableau de vérification de
+  compatibilité avec l'API Foundry réelle (script B, 3:55)
 - `packages/adaptyv-kinetics/docs/limitations.md` — les limites déclarées
+
+---
+
+## Avant d'enregistrer pour de vrai — checklist finale
+
+- [ ] Passer `docs/qa/visual-test-checklist.md` (13 applis) — un bug visuel non testé par
+      `pytest` ferait très mauvais effet à l'écran.
+- [ ] Une fois le Loom exporté, remplacer le lien placeholder
+      `https://www.loom.com/share/laurent-rosa-arsene-adaptyv` par l'URL réelle **à trois
+      endroits** : `docs/submission/email.md` (les deux versions), et le lien "Loom" en
+      haut du mini-site (`docs/site/index.html`) — puis cliquer le lien depuis le site
+      publié pour vérifier qu'il ne 404 pas avant d'envoyer l'email.
