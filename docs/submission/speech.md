@@ -48,7 +48,7 @@ one design family. Spending: a budget planner, and a guardrail proxy that makes 
 the lab: a curve-triage tool that quantifies how much human review you can safely remove,
 and a benchmark that measures which in-silico score actually predicts your wet-lab outcome.
 
-They're not sketches. Thirteen tools, one shared foundation, 285 tests, 100% coverage,
+They're not sketches. Thirteen tools, one shared foundation, 302 tests, 100% coverage,
 strict type-checking — all green in CI."
 
 **[3:15 — The one that's arguably bigger than the flagship]**
